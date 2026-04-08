@@ -31,7 +31,7 @@ Useful genome summary flags:
 **Gene summary:**
 ```bash
 datasets summary gene symbol GENE --taxon 'ORGANISM' --as-json-lines | \
-  dataformat tsv gene --fields symbol,gene-id,description,gene-type
+  dataformat tsv gene --fields symbol,gene-id,description,gene-type,chromosomes,annotation-genomic-range-accession,annotation-genomic-range-range-start,annotation-genomic-range-range-stop,annotation-genomic-range-range-orientation,synonyms
 ```
 
 Gene summary by ID:

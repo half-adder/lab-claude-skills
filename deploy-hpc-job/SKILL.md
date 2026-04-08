@@ -1,6 +1,6 @@
 ---
 name: deploy-hpc-job
-description: Deploy Python scientific computing jobs to an HPC cluster via SLURM. Scaffolds uv projects, generates SLURM scripts, handles rsync deployment, remote setup, and job management. Use when setting up or managing GPU/CPU jobs on HPC, or when the user mentions SLURM, cluster, or HPC.
+description: Deploy and manage jobs on an HPC cluster via SLURM. Supports Python (uv), R, Nextflow, and module-based tools. Handles SLURM script generation, rsync deployment, and job management. Use when setting up or managing jobs on HPC, or when the user mentions SLURM, cluster, or HPC.
 ---
 
 <essential_principles>
@@ -13,38 +13,35 @@ Read `cluster-config.toml` in this skill's directory. If it does not exist, tell
 
 Then read the example file and help them fill it in. Do not proceed until the config exists.
 
-Use the config values everywhere instead of hardcoded paths. Reference them as `{ssh.host}`, `{ssh.user}`, `{paths.scratch}`, etc. throughout the workflows.
+Use the config values everywhere instead of hardcoded paths.
 
-**Python on HPC:**
-- Always use `uv`, never pip, conda, or module-loaded Python
-- Pin `requires-python = ">=3.11,<3.14"` (PyTorch lacks wheels for bleeding-edge CPython)
-- For GPU jobs, configure PyTorch CUDA index in `pyproject.toml`:
-  ```toml
-  [tool.uv.sources]
-  torch = [{ index = "pytorch" }]
+**Lmod module system:**
+- Load software with `module load <name>/<version>` in SLURM scripts
+- Check available versions: `ssh {ssh.host} 'module avail <name> 2>&1'`
+- Multiple modules can be loaded: `module load samtools/1.23.1 bedtools/2.31.1`
+- Module loads go BEFORE the main command in SLURM scripts
+- Use `module purge` at the top of SLURM scripts for a clean environment
+- Pin specific versions, not defaults, for reproducibility
 
-  [[tool.uv.index]]
-  name = "pytorch"
-  url = "https://download.pytorch.org/whl/cu124"
-  explicit = true
-  ```
-- Install uv on cluster: `curl -LsSf https://astral.sh/uv/install.sh | sh`
-- Run `uv sync` on login node (compute nodes may lack internet)
-- SLURM scripts need `export PATH="$HOME/.local/bin:$PATH"` for uv
+**Deployment pattern:**
+- Use `rsync -avz` for file transfers, never scp
+- Create remote directories before rsync'ing into them
+- Run setup commands on login node (compute nodes may lack internet)
+- Scratch space is for active jobs, not long-term storage
 
 **Common pitfalls:**
-- Set `torch.set_float32_matmul_precision("medium")` to use tensor cores on modern GPUs
-- Match `num_workers` in data loaders to `--cpus-per-task` in SLURM (default can be 128+)
-- Create remote directories before rsync'ing files into them
-- Use `rsync -avz` for deployment, not scp
+- Always specify `--mem` in SLURM, default is often too low
+- Match `--cpus-per-task` to actual parallelism in your code
+- Quote paths with spaces in SLURM scripts
+- Check `.err` log first when jobs fail
 
 </essential_principles>
 
 <intake>
 What would you like to do?
 
-1. **New project** -- scaffold a Python project, write SLURM scripts, deploy to cluster, and submit
-2. **Manage existing job** -- monitor, cancel, resubmit, or retrieve results from a running/completed job
+1. **New job** -- set up and submit a new job to the cluster
+2. **Manage existing job** -- monitor, cancel, resubmit, or retrieve results
 
 **Wait for response before proceeding.**
 </intake>
@@ -52,19 +49,20 @@ What would you like to do?
 <routing>
 | Response | Workflow |
 |----------|----------|
-| 1, "new", "create", "set up", "deploy", "scaffold" | `workflows/new-project.md` |
+| 1, "new", "create", "set up", "deploy", "scaffold", "submit", "run" | `workflows/new-job.md` |
 | 2, "manage", "monitor", "check", "cancel", "retrieve", "results", "status" | `workflows/manage-job.md` |
 
 **After reading the workflow, follow it exactly.**
 </routing>
 
 <reference_index>
-**Cluster reference:** references/cluster.md -- partitions, resource limits, SLURM templates, interactive sessions
+**Cluster details:** references/cluster.md -- partitions, SLURM templates, resource guidelines, interactive sessions
+**Runtime guides:** references/runtimes.md -- Python/uv, R, Nextflow, and module-only job patterns
 </reference_index>
 
 <workflows_index>
 | Workflow | Purpose |
 |----------|---------|
-| new-project.md | Full scaffold-to-submit pipeline for a new HPC job |
+| new-job.md | Gather requirements, generate SLURM script, deploy, and submit |
 | manage-job.md | Monitor, cancel, resubmit, retrieve results |
 </workflows_index>
