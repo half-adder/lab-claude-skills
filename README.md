@@ -7,6 +7,7 @@ Shared [Claude Code](https://claude.ai/claude-code) skills for the McKay Lab. Th
 | Skill | Directory | Description |
 |-------|-----------|-------------|
 | `ncbi-datasets` | `ncbi/` | Query and download biological sequence data from NCBI using the `datasets` and `dataformat` CLI tools. Includes Drosophila cytological band lookups with subdivision-level resolution. |
+| `deploy-hpc-job` | `deploy-hpc-job/` | Deploy Python scientific computing jobs to HPC clusters via SLURM. Scaffolds uv projects, generates SLURM scripts, handles rsync deployment. Configurable per-user via `cluster-config.toml`. |
 
 ## Setup
 
@@ -19,6 +20,15 @@ Or clone manually and run:
 ```bash
 git clone git@github.com:half-adder/lab-claude-skills.git ~/code/lab-claude-skills
 ~/code/lab-claude-skills/setup.sh
+```
+
+Some skills require per-user configuration. The skill will walk you through this on first use, or you can set it up manually:
+
+```bash
+# For the HPC skill, copy and edit the cluster config:
+cd ~/code/lab-claude-skills/deploy-hpc-job
+cp cluster-config.example.toml cluster-config.toml
+# Edit cluster-config.toml with your SSH host, username, scratch path, and email
 ```
 
 ## Updating

@@ -37,7 +37,10 @@ Common fields for `dataformat tsv genome-seq`:
 | `genbank-seq-acc` | GenBank sequence accession |
 | `refseq-seq-acc` | RefSeq sequence accession |
 | `role` | Sequence role (assembled-molecule, etc.) |
-| `assigned-molecule-loc` | Molecule location type |
+| `mol-type` | Molecule type |
+| `gc-percent` | GC content percentage |
+| `sequence-name` | Sequence name |
+| `ucsc-style-name` | UCSC-style name |
 </genome_seq_fields>
 
 <gene_fields>
@@ -52,14 +55,21 @@ Common fields for `dataformat tsv gene`:
 | `tax-id` | Taxonomy ID |
 | `tax-name` | Organism name |
 | `synonyms` | Gene synonyms |
-| `chromosome` | Chromosome location |
-| `genomic-range-accession` | Genomic accession for location |
-| `genomic-range-start` | Start position |
-| `genomic-range-stop` | Stop position |
-| `genomic-range-orientation` | Strand orientation |
+| `chromosomes` | Chromosome location |
+| `annotation-genomic-range-accession` | Genomic accession for location |
+| `annotation-genomic-range-range-start` | Start position |
+| `annotation-genomic-range-range-stop` | Stop position |
+| `annotation-genomic-range-range-orientation` | Strand orientation |
+| `annotation-genomic-range-seq-name` | Sequence name (e.g., 3R) |
+| `annotation-assembly-accession` | Assembly accession for annotation |
+| `annotation-assembly-name` | Assembly name for annotation |
+| `annotation-release-name` | Annotation release name |
 | `ensembl-geneids` | Ensembl Gene IDs |
 | `omim-ids` | OMIM IDs |
-| `swiss-prot-accessions` | SwissProt accessions |
+| `swissprot-accessions` | SwissProt accessions |
+| `summary-description` | Gene summary/function description |
+| `protein-count` | Number of protein products |
+| `transcript-count` | Number of transcripts |
 </gene_fields>
 
 <gene_product_fields>
@@ -69,11 +79,17 @@ Common fields for `dataformat tsv gene-product`:
 |-------|-------------|
 | `symbol` | Gene symbol |
 | `gene-id` | NCBI Gene ID |
+| `gene-type` | Gene type |
 | `transcript-accession` | RefSeq transcript accession |
-| `protein-accession` | RefSeq protein accession |
-| `protein-name` | Protein name |
-| `protein-length` | Protein length (aa) |
+| `transcript-name` | Transcript name |
 | `transcript-length` | Transcript length (nt) |
+| `transcript-protein-accession` | RefSeq protein accession |
+| `transcript-protein-name` | Protein name |
+| `transcript-protein-length` | Protein length (aa) |
+| `transcript-genomic-location-accession` | Genomic accession for transcript location |
+| `transcript-genomic-location-seq-name` | Sequence name (e.g., 3R) |
+| `transcript-select-category` | Transcript selection category |
+| `transcript-transcript-type` | Transcript type |
 </gene_product_fields>
 
 <templates>

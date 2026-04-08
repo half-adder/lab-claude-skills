@@ -1,0 +1,28 @@
+# Copy this file to cluster-config.toml and fill in your details.
+# The skill reads this file to configure SSH, paths, and SLURM defaults.
+
+[ssh]
+host = "longleaf"              # SSH config host alias (must be in ~/.ssh/config)
+user = "onyen"                 # Your cluster username (e.g., ONYEN for UNC)
+
+[paths]
+scratch = "/work/users/X/Y/onyen/"   # Your scratch/work directory (replace X/Y/onyen)
+local_code = "~/code"                # Where projects are scaffolded locally
+
+[email]
+address = "onyen@email.unc.edu"      # For SLURM job notifications
+
+[gpu]
+partitions = "a100-gpu,l40-gpu"      # Comma-separated GPU partition names
+qos = "gpu_access"                   # GPU QoS name
+default_cpus = 12                    # CPUs per GPU job
+default_mem = "32g"                  # Memory per GPU job
+default_time = "12:00:00"            # Default GPU walltime
+
+[cpu]
+default_cpus = 4
+default_mem = "16g"
+default_time = "4:00:00"
+
+[interactive]
+partition = "interact"               # Interactive session partition

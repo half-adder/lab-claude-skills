@@ -41,7 +41,7 @@ datasets download genome taxon 'Drosophila melanogaster' --reference \
 **Gene lookup:**
 ```bash
 datasets summary gene symbol Ubx --taxon 'Drosophila melanogaster' --as-json-lines | \
-  dataformat tsv gene --fields symbol,gene-id,description
+  dataformat tsv gene --fields symbol,gene-id,description,gene-type,chromosomes,annotation-genomic-range-accession,annotation-genomic-range-range-start,annotation-genomic-range-range-stop,annotation-genomic-range-range-orientation,synonyms
 ```
 </quick_start>
 

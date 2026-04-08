@@ -43,7 +43,7 @@ datasets summary gene gene-id 12345 --as-json-lines | \
 **Gene product report** (transcripts and proteins):
 ```bash
 datasets summary gene symbol GENE --taxon 'ORGANISM' --report product --as-json-lines | \
-  dataformat tsv gene-product --fields symbol,transcript-accession,protein-accession,protein-name
+  dataformat tsv gene-product --fields symbol,transcript-accession,transcript-protein-accession,transcript-protein-name
 ```
 
 **Taxonomy summary:**
