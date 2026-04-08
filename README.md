@@ -10,32 +10,18 @@ Shared [Claude Code](https://claude.ai/claude-code) skills for the McKay Lab. Th
 
 ## Setup
 
-1. Clone this repo:
-   ```bash
-   git clone git@github.com:seanjohnsen/lab-claude-skills.git ~/code/lab-claude-skills
-   ```
+```bash
+curl -fsSL https://raw.githubusercontent.com/half-adder/lab-claude-skills/main/setup.sh | bash
+```
 
-2. Symlink the skills you want into your Claude Code skills directory:
-   ```bash
-   mkdir -p ~/.claude/skills
-   ln -s ~/code/lab-claude-skills/ncbi ~/.claude/skills/ncbi-datasets
-   ```
+Or clone manually and run:
 
-3. Copy the slash command(s) to your commands directory:
-   ```bash
-   mkdir -p ~/.claude/commands
-   cp ~/code/lab-claude-skills/commands/* ~/.claude/commands/
-   ```
+```bash
+git clone git@github.com:half-adder/lab-claude-skills.git ~/code/lab-claude-skills
+~/code/lab-claude-skills/setup.sh
+```
 
-4. Install prerequisites for the NCBI skill:
-   ```bash
-   # Install datasets + dataformat CLI
-   conda install -c conda-forge ncbi-datasets-cli
-   # Or direct download (macOS):
-   curl -o /usr/local/bin/datasets 'https://ftp.ncbi.nlm.nih.gov/pub/datasets/command-line/v2/mac/datasets'
-   curl -o /usr/local/bin/dataformat 'https://ftp.ncbi.nlm.nih.gov/pub/datasets/command-line/v2/mac/dataformat'
-   chmod +x /usr/local/bin/datasets /usr/local/bin/dataformat
-   ```
+Re-run the setup script anytime to pull updates and pick up new skills.
 
 ## Usage
 
@@ -47,11 +33,7 @@ Invoke a skill via its slash command:
 /ncbi-datasets look up gene Ubx in Drosophila
 ```
 
-Or just type `/ncbi-datasets` for an interactive menu.
-
-## Caching
-
-The NCBI skill caches downloaded chromosome GenBank files at `~/.cache/ncbi-datasets/gbff/` to avoid re-downloading when extracting multiple regions from the same chromosome. Clear with `rm -rf ~/.cache/ncbi-datasets/`.
+Or just type `/ncbi-datasets` for an interactive menu. Each skill will guide you through installing any required CLI tools on first use.
 
 ## Adding New Skills
 

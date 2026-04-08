@@ -17,12 +17,12 @@ description: Query and download biological sequence data from NCBI using the dat
 5. **Rate limiting:** Default 5 req/sec. Use `--api-key` for 10 req/sec.
 6. **Data packages** are ZIP archives. When extracted: `ncbi_dataset/data/` contains sequences and `assembly_data_report.jsonl` metadata.
 
-**Check installation:**
+**Before any workflow, check that the CLI tools are installed:**
 ```bash
-datasets version && dataformat version
+which datasets && which dataformat
 ```
 
-If not installed, see `references/installation.md`.
+If either is missing, read `references/installation.md` and walk the user through installation before proceeding. Do not skip this step.
 </essential_principles>
 
 <quick_start>
