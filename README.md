@@ -1,6 +1,6 @@
-# McKay Lab Claude Code Skills
+# Bio Lab Claude Code Skills
 
-Shared [Claude Code](https://claude.ai/claude-code) skills for the McKay Lab. These provide domain-specific capabilities for common research workflows.
+Shared [Claude Code](https://claude.ai/claude-code) skills for Biology lab work. These provide domain-specific capabilities for common research workflows.
 
 ## Available Skills
 
