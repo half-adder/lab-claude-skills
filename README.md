@@ -21,7 +21,19 @@ git clone git@github.com:half-adder/lab-claude-skills.git ~/code/lab-claude-skil
 ~/code/lab-claude-skills/setup.sh
 ```
 
-Re-run the setup script anytime to pull updates and pick up new skills.
+## Updating
+
+Skills are symlinked to the cloned repo, so updating is just a `git pull`:
+
+```bash
+cd ~/code/lab-claude-skills && git pull
+```
+
+Existing skills update immediately since Claude Code reads them through the symlinks. If new skills or slash commands were added, re-run the setup script to pick them up:
+
+```bash
+~/code/lab-claude-skills/setup.sh
+```
 
 ## Usage
 
