@@ -9,6 +9,8 @@ Shared [Claude Code](https://claude.ai/claude-code) skills for Biology lab work.
 | `ncbi-datasets` | `ncbi/` | Query and download biological sequence data from NCBI using the `datasets` and `dataformat` CLI tools. Includes Drosophila cytological band lookups with subdivision-level resolution. |
 | `deploy-hpc-job` | `deploy-hpc-job/` | Deploy and manage jobs on HPC clusters via SLURM. Supports Python/uv, R, Nextflow, and module-based tools (samtools, STAR, etc.). Handles SLURM script generation, lmod modules, rsync deployment, and job management. Configurable per-user via `cluster-config.toml`. |
 | `molmass` | `molmass/` | Compute molecular weight from a chemical formula via the `molmass` CLI. Use for buffer recipes, dilutions, stoichiometry, or peptide mass. Supports formulas, isotopes, and 1-letter peptides. Requires `uv tool install molmass`. |
+| `geo-database` | `geo-database/` | Search NCBI GEO and download gene expression / functional genomics datasets (GSE, GSM, GPL). Use for pulling published Drosophila chromatin, RNA-seq, ChIP-seq, or CUT&Tag data for reanalysis, or looking up GEO metadata for a paper. |
+| `protocol-planner` | `protocol-planner/` | Build linked Excel workbooks from a protocol PDF. Produces a Samples sheet, one Buffers sheet per protocol day with unit-aware recipes, and bench-ready sheets stripped of planning clutter. Use when starting a new protocol or adding a day to an existing planner. |
 
 ## Setup
 
