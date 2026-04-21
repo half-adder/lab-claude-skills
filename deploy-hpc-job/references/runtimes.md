@@ -141,9 +141,66 @@ nextflow run nf-core/<pipeline> \
 **Important Nextflow notes:**
 - The SLURM script for Nextflow is a **head job**, not the compute job. Request minimal resources (2 CPUs, 8GB).
 - Nextflow submits its own SLURM jobs for each process. It needs `-profile singularity` or `-profile apptainer` on most clusters.
-- Use `-work-dir` on scratch, not home (lots of intermediate files)
+- Use `-work-dir` on **fast scratch** (e.g. `/work` on Longleaf, parallel FS on most sites). Home directories are often NFS-cached and cause slow `.exitcode` propagation, which feeds directly into the failure mode below.
 - Resume failed runs with `-resume`
 - Clean up work directory after successful runs: `nextflow clean -f`
+
+**SLURM executor configuration (required for reliable runs):**
+
+Nextflow's SLURM grid executor has a well-documented failure mode where a single missing-from-queue reading falsely starts an exit-status timeout, causing tasks to be marked failed while still running (nextflow-io/nextflow #5298, #5813, #1644). Set these in `nextflow.config` to prevent it:
+
+```groovy
+profiles {
+    slurm {
+        executor {
+            // Must be longer than your longest task. Once the timer starts
+            // (on a single bad squeue reading), Nextflow does not reset it
+            // even when subsequent readings show the job running again.
+            exitReadTimeout   = '6.h'
+
+            // Biowulf-recommended values to reduce slurmctld RPC load and
+            // minimize the chance of transient squeue glitches. Source:
+            // https://hpc.nih.gov/apps/nextflow.html
+            pollInterval      = '2.min'
+            queueStatInterval = '5.min'
+            submitRateLimit   = '6/1min'
+            queueSize         = 20
+        }
+
+        process {
+            executor = 'slurm'
+            // CRITICAL: do NOT set `queue = '<name>'`. If you do, Nextflow
+            // calls `squeue -p <name>`, which misses any child job SLURM
+            // auto-routes to a different partition (e.g. hov, spill on
+            // Longleaf). Leave unset so `squeue -u $USER` is used.
+            errorStrategy = { task.exitStatus in 137..143 ? 'retry' : 'finish' }
+            maxRetries    = 1
+
+            // Per-process resources still work fine without process.queue:
+            withName: BOWTIE2_ALIGN { cpus = 8; memory = '16.GB'; time = '4.h' }
+            // ...
+        }
+    }
+}
+
+// Enable overwrite on these or -resume fails on re-render:
+timeline { enabled = true; overwrite = true; file = "<outdir>/pipeline_info/timeline.html" }
+report   { enabled = true; overwrite = true; file = "<outdir>/pipeline_info/report.html"   }
+trace    { enabled = true; overwrite = true; file = "<outdir>/pipeline_info/trace.txt"      }
+```
+
+**Post-Dec 2025 Nextflow** (check your cluster's installed version): `executor.slurm.onlyJobState = true` switches to SchedMD's lightweight `squeue --only-job-state` RPC, which largely sidesteps this class of bug. From PR #6659.
+
+**Verify before long runs:** after submitting, SSH to the cluster and run `squeue -u $USER` (no `-p` filter). Confirm all child jobs appear. If they don't — e.g. they're all under a partition you didn't specify — that's the auto-routing issue; the config above handles it but it's worth sanity-checking on a new cluster.
+
+**Symptom-to-fix map when a Nextflow-on-SLURM run fails:**
+
+| Error in log | Cause | Fix |
+|---|---|---|
+| `Process ... terminated for an unknown reason -- Likely it has been terminated by the external system` with job actually still RUNNING per `sacct` | `squeue` partial results (often partition filter; sometimes controller overload) | Remove `process.queue`; bump `exitReadTimeout` |
+| `Failed to get exit status ... exitStatusReadTimeoutMillis: 1800000; delta: 1800xxx` in `.nextflow.log` | Same as above, just the debug-level message | Same as above |
+| `Timeline file already exists` / `Report file already exists` on `-resume` | Missing `overwrite = true` | Add `overwrite = true` to timeline/report/trace |
+| `Nextflow-on-fast-FS works but `.exitcode` still slow` | NFS-backed home for workDir | Move workDir to parallel scratch (`/work` etc.), or symlink the old path there to keep the cache valid |
 
 </nextflow_pipelines>
 

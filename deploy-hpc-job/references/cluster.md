@@ -118,6 +118,8 @@ nextflow run <pipeline> \
     -work-dir {paths.scratch}<project>/work
 ```
 
+**See `references/runtimes.md` (Nextflow section) for required `nextflow.config` SLURM executor tuning.** Without it, multi-step pipelines will fail intermittently with "terminated for an unknown reason" while the actual SLURM jobs are still running. Key points: do NOT set `process.queue`, bump `exitReadTimeout` to `6.h`, use Biowulf's polling values, enable `overwrite = true` on timeline/report/trace.
+
 </slurm_nextflow_template>
 
 <resource_guidelines>
