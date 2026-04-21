@@ -18,7 +18,7 @@ description: Search NCBI GEO and download gene expression / functional genomics 
 **Rules:**
 1. For raw-read reanalysis (ChIP-seq, CUT&Tag, RNA-seq), you almost always want FASTQs from SRA, not the GEO series matrix. GEO supplementary files are often processed bigwigs/peaks, not reads.
 2. Set `Entrez.email` before any Biopython calls. Use an API key for >3 req/s.
-3. Raw data is large. Ask whether to run on the **HPC cluster** or **locally** before downloading (see intake).
+3. Raw data is large. Ask whether to run on the **HPC cluster** or **locally** before downloading.
 4. Drosophila context: typical organism filter is `Drosophila melanogaster[Organism]`. Common platforms: GPL13304 (HiSeq 2000), GPL17275 (HiSeq 2500), GPL19132 (NextSeq 500), GPL21306 (HiSeq 4000).
 5. Always cite the original GSE in experiment notes when reanalyzing.
 </essential_principles>
